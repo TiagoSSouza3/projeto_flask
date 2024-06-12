@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Produtos</title>
-</head>
-<body>
-    <h1>Produtos</h1>
+{% extends "base.html" %}
 
+{% block title %} Produtos {% endblock %}
 
-    {% for produto in produtos %}
-      <h2>{{ produto.nome }}</h2>
-      <p>{{ produto.descrição }}</p>
-    {% endfor %}
+{% block content %}
+  <h1>Produtos</h1>
 
-        
-</body>
-</html>
+  {% for produto in produtos %}
+  <a href="/produtos/{{ produto.nome }}">
+    <h2>{{ produto.nome }}</h2>
+  </a>
+    <p>{{ produto.descrição }}</p>
+  {% endfor %}
+      
+  <a href="/">
+    Back
+  </a>
+{% endblock %}

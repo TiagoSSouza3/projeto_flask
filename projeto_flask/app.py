@@ -9,8 +9,8 @@ lista_produtos = [
 ]
 
 @app.route("/")
-def nome():
-    return "<a style='color: black; text-decoration: none;' href='/contato'><h1>Home</h1></a>" + "<a style='color: black; text-decoration: none;' href='/produtos'><h1>Produtos</h1></a>"
+def home():
+    return render_template("home.html")
 
 @app.route("/contato")
 def contato():
@@ -24,5 +24,7 @@ def produtos():
 def produto(nome):
     for produto in lista_produtos:
         if produto['nome'] == nome:
-            return f"Achei!!! {produto['nome']}, {produto['descrição']}"
+            return render_template("produto.html", produto = produto)
     return "Achei não"
+
+app.run()
