@@ -3,9 +3,9 @@ from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
 lista_produtos = [
-    {"nome": "coca-cola", "descrição": "veneno"},
-    {"nome": "doritos", "descrição": "veveno ao quadrado"},
-    {"nome": "agua", "descrição": "legal", "imagem": "https://pt-br.learn.canva.com/wp-content/uploads/sites/9/2019/05/Como-Tirar-e-Editar-Sua-Foto-para-Perfil-em-Redes-Sociais-featuredimage-e1559023010630.jpg"}
+    {"nome": "coca-cola", "descrição": "veneno", "preco": 1.0, "imagem": ""},
+    {"nome": "doritos", "descrição": "veveno ao quadrado", "preco": 12344.0, "imagem": ""},
+    {"nome": "agua", "descrição": "legal", "preco": 12.0, "imagem": ""}
 ]
 
 @app.route("/")
@@ -34,6 +34,6 @@ def cadastro_produto():
 # POST
 @app.route("/produtos", methods=["POST"])
 def salvar_produto():
-    lista_produtos.append({"nome": request.form["nome"], "descrição": request.form["descricao"], "imagem": request.form["imagem"]})
+    lista_produtos.append({"nome": request.form["nome"], "descrição": request.form["descricao"], "preco": request.form["preco"] ,"imagem": request.form["imagem"]})
     return redirect(url_for("produtos"))
 app.run()
