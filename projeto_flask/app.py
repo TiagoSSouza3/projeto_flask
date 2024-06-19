@@ -1,11 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
 lista_produtos = [
     {"nome": "coca-cola", "descrição": "veneno"},
     {"nome": "doritos", "descrição": "veveno ao quadrado"},
-    {"nome": "agua", "descrição": "legal"}
+    {"nome": "agua", "descrição": "legal", "imagem": "https://pt-br.learn.canva.com/wp-content/uploads/sites/9/2019/05/Como-Tirar-e-Editar-Sua-Foto-para-Perfil-em-Redes-Sociais-featuredimage-e1559023010630.jpg"}
 ]
 
 @app.route("/")
@@ -27,4 +27,13 @@ def produto(nome):
             return render_template("produto.html", produto = produto)
     return "Achei não"
 
+@app.route("/produto/cadastro")
+def cadastro_produto():
+    return render_template("cadastro.html")
+
+# POST
+@app.route("/produtos", methods=["POST"])
+def salvar_produto():
+    lista_produtos.append({"nome": request.form["nome"], "descrição": request.form["descricao"], "imagem": request.form["imagem"]})
+    return redirect(url_for("produtos"))
 app.run()

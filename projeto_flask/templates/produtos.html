@@ -10,8 +10,14 @@
     <h2>{{ produto.nome }}</h2>
   </a>
     <p>{{ produto.descrição }}</p>
+  <img src="{{ produto.imagem }}">
   {% endfor %}
-      
+  
+  <div>
+    <a href="/produto/cadastro">
+      Cadastrar
+    </a>
+  </div>
   <a href="/">
     Back
   </a>
