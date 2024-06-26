@@ -2,11 +2,21 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-lista_produtos = [
-    {"nome": "coca-cola", "descrição": "veneno", "preco": 1.0, "imagem": ""},
-    {"nome": "doritos", "descrição": "veveno ao quadrado", "preco": 12344.0, "imagem": ""},
-    {"nome": "agua", "descrição": "legal", "preco": 12.0, "imagem": ""}
-]
+def obter_produtos():
+    with open("produtos.csv") as file:
+        lista_produtos = []
+        for linha in file:
+            valores = linha.strip().split(",")
+            nome, descricao, preco, imagem = valores
+            produto = {
+                "nome": nome,
+                "descricao": descricao,
+                "preco": preco,
+                "imagem": imagem
+            }
+            lista_produtos.append(produto)
+
+        return(lista_produtos)
 
 @app.route("/")
 def home():
@@ -18,11 +28,11 @@ def contato():
 
 @app.route("/produtos")
 def produtos():
-    return render_template("produtos.html", produtos = lista_produtos)
+    return render_template("produtos.html", produtos = obter_produtos())
 
 @app.route("/produtos/<nome>")
 def produto(nome):
-    for produto in lista_produtos:
+    for produto in obter_produtos():
         if produto['nome'] == nome:
             return render_template("produto.html", produto = produto)
     return "Achei não"
@@ -31,9 +41,15 @@ def produto(nome):
 def cadastro_produto():
     return render_template("cadastro.html")
 
+def adicionar_produto(produto):
+    with open("produtos.csv", "a") as file:
+        linha = f"{produto['nome']},{produto['descricao']},{produto['preco']},{produto['imagem']}\n"
+        file.write(linha)
+
 # POST
 @app.route("/produtos", methods=["POST"])
 def salvar_produto():
-    lista_produtos.append({"nome": request.form["nome"], "descrição": request.form["descricao"], "preco": request.form["preco"] ,"imagem": request.form["imagem"]})
+    produto = {"nome": request.form["nome"], "descricao": request.form["descricao"], "preco": request.form["preco"] ,"imagem": request.form["imagem"]}
+    adicionar_produto(produto)
     return redirect(url_for("produtos"))
 app.run()
