@@ -1,8 +1,12 @@
-{% extends "base.html" %}
+{% extends "base_2.html" %}
 
 {% block title %} Verificação de CPF {% endblock %}
 
+{% block link %}
+{{ link }}
+{% endblock %}
+
 {% block content %}
     <h1>CPF {{ validador }}</h1>
-    
+    <h3>{{ cpf }}</h3>
 {% endblock %}

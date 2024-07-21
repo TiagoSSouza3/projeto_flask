@@ -3,11 +3,14 @@ import random
 from validate_docbr import CPF, CNPJ
 
 app = Flask(__name__)
-cpf = CPF()
-cnpj = CNPJ()
+
+@app.route("/")
+def home():
+    return render_template("base.html")
 
 @app.route("/geradordecpf")
 def gerador_de_cpf():
+    cpf = CPF()
     roleta_russa = random.randint(0, 1)
     if roleta_russa == 0:
         cpf = random.randint(11111111111, 99999999999)
@@ -18,6 +21,7 @@ def gerador_de_cpf():
 
 @app.route("/geradordecnpj")
 def gerador_de_cnpj():
+    cnpj = CNPJ()
     roleta_russa = random.randint(0, 1)
     if roleta_russa == 0:
         cnpj = random.randint(11111111111111, 99999999999999)
@@ -37,8 +41,20 @@ def validador_de_cnpj():
 # POST
 @app.route("/verificacao_cpf", methods=["POST"])
 def verificar_cpf():
+    cpf = CPF()
     cpf_usuario = request.form["cpf"]
     if cpf.validate(cpf_usuario):
-        render_template("verificacao_cpf.html", validador = "Valido" )
-
+        return render_template("verificacao_cpf.html", link = "/validadordecpf", validador = "Valido", cpf = str(cpf.mask(cpf_usuario)) )
+    else:
+        return render_template("verificacao_cpf.html", link = "/validadordecpf", validador = "Invalido", cpf = "")
+    
+@app.route("/verificacao_cnpj", methods=["POST"])
+def verificar_cnpj():
+    cnpj = CNPJ()
+    cnpj_usuario = request.form["cnpj"]
+    if cnpj.validate(cnpj_usuario):
+        return render_template("verificacao_cnpj.html", link = "/validadordecnpj", validador = "Valido", cnpj = str(cnpj.mask(cnpj_usuario)) )
+    else:
+        return render_template("verificacao_cnpj.html", link = "/validadordecnpj", validador = "Invalido", cnpj = "")
+    
 app.run()
